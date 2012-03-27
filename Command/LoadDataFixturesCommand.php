@@ -62,24 +62,39 @@ EOT
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $env = $input->getOption('env');
-
         $inputParameters = array(
             'app/console',
             'doctrine:fixtures:load'
         );
 
         foreach ($this->getApplication()->getKernel()->getBundles() as $bundle) {
-            $fixturesPath = $bundle->getPath().'/DataFixtures/ORM/'.$env;
+            $environmentPath = $bundle->getPath().'/DataFixtures/ORM/'.$input->getOption('env');
+            $sharedPath = $bundle->getPath().'/DataFixtures/ORM/shared';
 
-            if (is_dir($fixturesPath)) {
-                $inputParameters[] = '--fixtures='.$fixturesPath;
+            foreach (array($environmentPath, $sharedPath) as $fixturesPath) {
+                if (is_dir($fixturesPath)) {
+                    $inputParameters[] = '--fixtures='.$fixturesPath;
+                }
             }
         }
 
-        $input = new ArgvInput($inputParameters);
-        $output = new NullOutput();
+        if (count($inputParameters) === 2) {
+            $output->writeln('<error>There are no fixtures to load.</error>');
+        } else {
+            if ($input->hasOption('append')) {
+                $inputParameters[] = '--append';
+            }
 
-        $this->getApplication()->doRun($input, $output);
+            if ($input->hasOption('em')) {
+                $inputParameters[] = '--em='.$input->getOption('em');
+            }
+
+            if ($input->hasOption('purge-with-truncate')) {
+                $inputParameters[] = '--purge-with-truncate';
+            }
+
+            $doctrineInput = new ArgvInput($inputParameters);
+            $this->getApplication()->doRun($doctrineInput, $output);
+        }
     }
 }
