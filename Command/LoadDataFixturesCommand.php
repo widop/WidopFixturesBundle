@@ -71,11 +71,11 @@ EOT
 
         foreach ($this->getApplication()->getKernel()->getBundles() as $bundle) {
             $environmentPath = $bundle->getPath() . '/DataFixtures/ORM/' . $input->getOption('env');
-            $sharedPath = $bundle->getPath().'/DataFixtures/ORM/shared';
+            $sharedPath = $bundle->getPath() . '/DataFixtures/ORM/shared';
 
             foreach (array($environmentPath, $sharedPath) as $fixturesPath) {
                 if (is_dir($fixturesPath)) {
-                    $inputParameters[] = '--fixtures='.$fixturesPath;
+                    $inputParameters[] = '--fixtures=' . $fixturesPath;
                 }
             }
         }
@@ -88,7 +88,7 @@ EOT
             }
 
             if ($input->getOption('em')) {
-                $inputParameters[] = '--em='.$input->getOption('em');
+                $inputParameters[] = '--em=' . $input->getOption('em');
             }
 
             if ($input->getOption('purge-with-truncate')) {
