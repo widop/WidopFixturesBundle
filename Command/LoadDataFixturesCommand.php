@@ -32,29 +32,34 @@ class LoadDataFixturesCommand extends Command
     {
         $this
             ->setName('widop:fixtures:load')
-            ->setDescription('Load data fixtures to your database.')
+            ->setDescription('Load data fixtures from a specific environnement to your database.')
             ->addOption('append', null, InputOption::VALUE_NONE, 'Append the data fixtures instead of deleting all data from the database first.')
             ->addOption('em', null, InputOption::VALUE_REQUIRED, 'The entity manager to use for this command.')
             ->addOption('purge-with-truncate', null, InputOption::VALUE_NONE, 'Purge data by using a database-level TRUNCATE statement')
             ->setHelp(<<<EOT
-The <info>doctrine:fixtures:load</info> command loads data fixtures from your bundles:
+The <info>widop:fixtures:load</info> command loads data fixtures from your bundles according to a specific environnement:
 
-  <info>./app/console doctrine:fixtures:load</info>
+    <info>./app/console widop:fixtures:load</info>
 
-You can also optionally specify the path to fixtures with the <info>--fixtures</info> option:
+By default, the environnement is <info>dev</info>, so, the dev fixtures will be loaded. If you want to load fixtures
+from an other environnement, you can use the <info>--env</info> tag:
 
-  <info>./app/console doctrine:fixtures:load --fixtures=/path/to/fixtures1 --fixtures=/path/to/fixtures2</info>
+    <info>./app/console widop:fixtures:load --env=env_name</info>
 
 If you want to append the fixtures instead of flushing the database first you can use the <info>--append</info> option:
 
-  <info>./app/console doctrine:fixtures:load --append</info>
+    <info>./app/console widop:fixtures:load --append</info>
 
-By default Doctrine Data Fixtures uses DELETE statements to drop the existing rows from
-the database. If you want to use a TRUNCATE statement instead you can use the <info>--purge-with-truncate</info> flag:
+By default, delete statements are executed in order to drop the existing rows from the database.
+If you want to use a truncate statement instead, you can use the <info>--purge-with-truncate</info> flag:
 
-  <info>./app/console doctrine:fixtures:load --purge-with-truncate</info>
+    <info>./app/console widop:fixtures:load --purge-with-truncate</info>
+
+If you want to use a specific entity manager, you can use the <info>--em</info> flag:
+
+    <info>./app/console widop:fixtures:load --em=em_name</info>
 EOT
-        );
+            );
     }
 
     /**
@@ -62,13 +67,10 @@ EOT
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $inputParameters = array(
-            'app/console',
-            'doctrine:fixtures:load'
-        );
+        $inputParameters = array('app/console', 'doctrine:fixtures:load');
 
         foreach ($this->getApplication()->getKernel()->getBundles() as $bundle) {
-            $environmentPath = $bundle->getPath().'/DataFixtures/ORM/'.$input->getOption('env');
+            $environmentPath = $bundle->getPath() . '/DataFixtures/ORM/' . $input->getOption('env');
             $sharedPath = $bundle->getPath().'/DataFixtures/ORM/shared';
 
             foreach (array($environmentPath, $sharedPath) as $fixturesPath) {
@@ -81,15 +83,15 @@ EOT
         if (count($inputParameters) === 2) {
             $output->writeln('<error>There are no fixtures to load.</error>');
         } else {
-            if ($input->hasOption('append')) {
+            if ($input->getOption('append')) {
                 $inputParameters[] = '--append';
             }
 
-            if ($input->hasOption('em')) {
+            if ($input->getOption('em')) {
                 $inputParameters[] = '--em='.$input->getOption('em');
             }
 
-            if ($input->hasOption('purge-with-truncate')) {
+            if ($input->getOption('purge-with-truncate')) {
                 $inputParameters[] = '--purge-with-truncate';
             }
 
