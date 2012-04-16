@@ -35,9 +35,19 @@ Take a look at this directory structure:
  | | | | |-- LoadPostData.php
 ```
 
-As explained in the command section, the command allows you to specify an environement with the `--env` option.
+Like explain in the command section, the command allows you to specify an environement with the `--env` option.
 
-If you execute the command `php app/console widop:fixtures:load --env=dev`, only fixtures under
-`dev` directories will be loaded using the dev configuration..
+Now, if you execute the command `php app/console widop:fixtures:load --env=dev`, only fixtures under
+`dev` directories will be loaded (the dev configuration will  be used too).
 
-**In any case, fixtures under the `shared` directory will always be loaded for all environments.**
+Additionally, fixtures under the `shared` directory will be loaded for all environments.
+
+## In Real life
+
+In order to explain how to use the bundle, I will take a very simple example : a blog (users, posts & tags).
+
+### Development environment
+
+### Test environment
+
+### Production environment
