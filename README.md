@@ -1,4 +1,9 @@
-The bundle allows to load doctrine fixtures by environment.
+The bundle allows to load doctrine fixtures by environment. Exemple:
+
+```bash
+# loads fixtures for the test environnement
+php app/console widop:fixtures:load --env=test
+```
 
 Documentation
 -------------
