@@ -10,16 +10,16 @@ use Symfony\Bundle\DoctrineBundle\Command\DoctrineCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Finder\Finder;
 
 /**
- *
+ * Command permitting loading SQL scripts.
  *
  */
 class LoadSqlFixturesCommand extends DoctrineCommand
 {
     /**
-     *
-     *
+     * @override
      */
     protected function configure()
     {
@@ -49,6 +49,7 @@ EOT
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $output->writeln(sprintf("Loading SQL files from project... "));
+        $finder = new Finder();
 
         // Récuperation des fichiers SQL
         $fixtures = array();
@@ -58,14 +59,16 @@ EOT
 
             foreach (array($environmentPath, $sharedPath) as $fixturesPath) {
                 if (is_dir($fixturesPath)) {
-                    $fixtures = array_merge($fixtures, glob($fixturesPath . '/' . "*.sql"));
+                    foreach ($finder->name('/\.sql/')->in($fixturesPath) as $fixture) {
+                        $fixtures[] = $fixture->getRealpath();
+                    }
                 }
             }
         }
 
         $conn = $this->getDoctrineConnection('default');
         foreach ($fixtures as $fixture) {
-            $output->writeln(sprintf("    > Processing file '<info>%s</info>'", $fixture));
+            $output->writeln(sprintf("  > Processing file '<info>%s</info>'", $fixture));
 
             $sql = file_get_contents($fixture);
             $statements = explode(";", $sql);
