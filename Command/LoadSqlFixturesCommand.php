@@ -68,9 +68,9 @@ EOT
             $output->writeln(sprintf("    > Processing file '<info>%s</info>'", $fixture));
 
             $sql = file_get_contents($fixture);
-            $statementst = explode(";", $sql);
+            $statements = explode(";", $sql);
 
-            foreach ($statementst as $sqlStatement) {
+            foreach ($statements as $sqlStatement) {
                 $sqlStatement = trim($sqlStatement);
 
                 if ($sqlStatement != "") {
