@@ -28,27 +28,14 @@ class LoadSqlFixturesCommand extends DoctrineCommand
             ->setDescription('Load sql fixtures from a specific environnement to your database.')
             ->addOption('em', null, InputOption::VALUE_REQUIRED, 'The entity manager to use for this command.')
             ->setHelp(<<<EOT
-The <info>widop:fixtures:load</info> command loads data fixtures from your bundles according to a specific environnement:
+The <info>widop:fixtures:sql</info> command loads sql scripts from your bundles according to a specific environnement:
 
-    <info>./app/console widop:fixtures:load</info>
+    <info>./app/console widop:fixtures:sql</info>
 
-By default, the environnement is <info>dev</info>, so, the dev fixtures will be loaded. If you want to load fixtures
+By default, the environnement is <info>dev</info>, so, the dev sql scripts will be loaded. If you want to load fixtures
 from an other environnement, you can use the <info>--env</info> tag:
 
-    <info>./app/console widop:fixtures:load --env=env_name</info>
-
-If you want to append the fixtures instead of flushing the database first you can use the <info>--append</info> option:
-
-    <info>./app/console widop:fixtures:load --append</info>
-
-By default, delete statements are executed in order to drop the existing rows from the database.
-If you want to use a truncate statement instead, you can use the <info>--purge-with-truncate</info> flag:
-
-    <info>./app/console widop:fixtures:load --purge-with-truncate</info>
-
-If you want to use a specific entity manager, you can use the <info>--em</info> flag:
-
-    <info>./app/console widop:fixtures:load --em=em_name</info>
+    <info>./app/console widop:fixtures:sql --env=env_name</info>
 EOT
         );
     }
@@ -61,7 +48,7 @@ EOT
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $output->writeln(sprintf("Loading SQL file from project... "));
+        $output->writeln(sprintf("Loading SQL files from project... "));
 
         // Récuperation des fichiers SQL
         $fixtures = array();
@@ -71,11 +58,7 @@ EOT
 
             foreach (array($environmentPath, $sharedPath) as $fixturesPath) {
                 if (is_dir($fixturesPath)) {
-
-                    $files = glob($fixturesPath . '/' . "*.sql");
-                    foreach ($files as $currentFile) {
-                        $fixtures[] = $currentFile;
-                    }
+                    $fixtures = array_merge($fixtures, glob($fixturesPath . '/' . "*.sql"));
                 }
             }
         }
