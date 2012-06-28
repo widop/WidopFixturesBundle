@@ -11,7 +11,7 @@
 
 namespace Widop\FixturesBundle\Command;
 
-use Doctrine\Component\Console\Command\Command,
+use Symfony\Component\Console\Command\Command,
     Symfony\Component\Console\Input\InputOption,
     Symfony\Component\Console\Input\InputInterface,
     Symfony\Component\Console\Input\ArgvInput,
