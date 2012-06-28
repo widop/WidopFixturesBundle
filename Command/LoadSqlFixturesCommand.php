@@ -14,7 +14,6 @@ use Symfony\Component\Finder\Finder;
 
 /**
  * Command permitting loading SQL scripts.
- *
  */
 class LoadSqlFixturesCommand extends DoctrineCommand
 {
@@ -41,17 +40,18 @@ EOT
     }
 
     /**
+     * Executes all SQL files present in a defined folder. 
      *
-     * @param InputInterface $input
-     * @param OutputInterface $output
+     * @param InputInterface $input The inputinterface.  
+     * @param OutputInterface $output The Outputinterface. 
+     * 
      * @return int|void
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $output->writeln(sprintf("Loading SQL files from project... "));
         $finder = new Finder();
-
-        // Récuperation des fichiers SQL
+        
         $fixtures = array();
         foreach ($this->getApplication()->getKernel()->getBundles() as $bundle) {
             $environmentPath = $bundle->getPath() . '/DataFixtures/SQL/' . $input->getOption('env');
