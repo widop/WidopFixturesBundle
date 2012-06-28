@@ -42,7 +42,7 @@ EOT
     /**
      * Executes all SQL files present in a defined folder. 
      *
-     * @param InputInterface $input The inputinterface.  
+     * @param InputInterface  $input  The inputinterface.  
      * @param OutputInterface $output The Outputinterface. 
      * 
      * @return int|void
