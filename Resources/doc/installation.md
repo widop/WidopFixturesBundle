@@ -47,6 +47,7 @@ Add the following lines in your ``deps`` file
 [WidopFixturesBundle]
     git=http://github.com/widop/WidopFixturesBundle.git
     target=bundles/Widop/FixturesBundle
+    version=origin/2.0
 ```
 
 Run the vendors script
