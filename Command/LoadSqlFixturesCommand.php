@@ -71,7 +71,11 @@ EOT
             $output->writeln(sprintf("  > Processing file '<info>%s</info>'", $fixture));
 
             $sql = file_get_contents($fixture);
-            $statements = explode(";", $sql);
+            if (strpos($sql, '--SINGLE_QUERY--') == 0) {
+                $statements[] = $sql;
+            } else {
+                $statements = explode(";", $sql);
+            }
 
             foreach ($statements as $sqlStatement) {
                 $sqlStatement = trim($sqlStatement);
