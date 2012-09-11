@@ -96,6 +96,11 @@ EOT
             }
 
             $doctrineInput = new ArgvInput($inputParameters);
+
+            if ($input->getOption('no-interaction')) {
+                $doctrineInput->setInteractive(false);
+            }
+            
             $this->getApplication()->doRun($doctrineInput, $output);
         }
     }
