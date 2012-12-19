@@ -20,6 +20,14 @@ Run the composer update command
 $ php composer.phar update
 ```
 
+**Note**: you need to add `dev` to the `minimum-stability` section:
+
+``` json
+{
+    "minimum-stability": "dev"
+}
+```
+
 ### Add the WidopFixturesBundle to your application kernel
 
 ``` php
